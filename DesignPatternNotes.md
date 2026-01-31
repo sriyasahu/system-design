@@ -582,7 +582,7 @@ package org.example;
 
 import org.example.structural.facade.OrderFacade;
 
-public class Main {
+public class SingletonMain {
     public static void main(String[] args) {
         // The client only interacts with the Facade
         OrderFacade orderFacade = new OrderFacade();
@@ -936,7 +936,7 @@ public class OrderProcessor implements OrderMediator {
 The client doesn't need to know the order of operations or how the three subsystems interact. It only talks to the Mediator.
 
 ```java
-public class Main {
+public class SingletonMain {
     public static void main(String[] args) {
         // Create the Mediator
         OrderMediator orderMediator = new OrderProcessor();

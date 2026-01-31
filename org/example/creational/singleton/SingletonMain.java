@@ -1,4 +1,4 @@
-public class Main {
+public class SingletonMain {
     public static void main(String[] args) {
 
         // 1. Get the first instance
