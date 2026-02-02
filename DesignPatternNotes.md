@@ -413,7 +413,25 @@ class GiftWrapDecorator extends ProductDecorator {
 // System.out.println(myOrder.description() + " Cost: " + myOrder.price());
 
 ```
+1. How is it implemented here?
+   The magic of the Decorator pattern lies in Composition + Inheritance:
 
+The Component (Product): This is the base interface. It ensures that both the "Plain" product and the "Decorated" product look the same to the user.
+
+The Concrete Component (BasicProduct): This is the core object you are adding features to (e.g., a Phone or a Laptop).
+
+The Decorator (ProductDecorator): This is the bridge. It is a Product (inheritance) and it has a Product (composition).
+
+The Concrete Decorators (GiftWrap, ExtendedWarranty): These classes override the methods to add their own logic (adding price or description) before or after calling the original product's methods.
+
+2. Why do we need the abstract class?
+   The ProductDecorator abstract class is the "secret sauce" of this pattern for two main reasons:
+
+Uniformity (The "Is-A" relationship): By implementing Product, the decorator ensures that a "GiftWrapped Laptop" is still treated as a Product. You can pass it into any method that expects a Product.
+
+Delegation (The "Has-A" relationship): It holds a reference to the Product it is decorating. Without this abstract base, you would have to manually write the field protected Product product; and the constructor in every single decorator (GiftWrap, Warranty, Insurance, etc.). It keeps your code DRY (Don't Repeat Yourself).
+
+Flexibility: It allows you to wrap a decorator inside another decorator because they all share the same parent type.
 ---
 
 ## **3. Composite Design Pattern**
@@ -1022,3 +1040,47 @@ public class OrderProcessor implements OrderMediator {
 
 * Use **Facade** when you want to make a complex library **easier to use**.
 * Use **Mediator** when you want to make complex communication between objects **easier to maintain**.
+
+
+While both patterns are "Creational" or "Structural" in nature, they solve fundamentally different problems: the **Builder** is about *how* an object is made, whereas the **Decorator** is about *how* an object's behavior is extended after it's made.
+
+---
+
+### 1. Builder Pattern (The "Architect")
+
+The Builder pattern is a **Creational** pattern used to construct complex objects step-by-step. It is most useful when an object has many optional parameters or requires a multi-stage assembly.
+
+* **Focus:** Creation and Encapsulation.
+* **Problem it solves:** Avoiding "Telescoping Constructors" (where you have a constructor with 10+ parameters, many of which are null).
+* **Result:** You get a single, fully formed object at the end of the `build()` process.
+
+**Example:** Building a Pizza. You choose the crust, then the sauce, then the toppings. Once it's built, the process is over.
+
+---
+
+### 2. Decorator Pattern (The "Attachments")
+
+The Decorator pattern is a **Structural** pattern used to add new functionality to an existing object dynamically without altering its structure. It wraps the original object.
+
+* **Focus:** Extension and Flexibility.
+* **Problem it solves:** Avoiding a "Class Explosion" (where you create endless subclasses for every possible combination of features).
+* **Result:** You get a "wrapped" object that still looks like the original but has extra "layers" of behavior.
+
+**Example:** Ordering a Coffee. You have a basic Coffee object. You wrap it with a "Milk Decorator," then wrap that with a "Sugar Decorator." It’s still a Coffee, but the `cost()` method now calculates the total of all layers.
+
+---
+
+### Comparison Table
+
+| Feature | Builder Pattern | Decorator Pattern |
+| --- | --- | --- |
+| **Category** | Creational (How to build) | Structural (How to add features) |
+| **Object State** | Built in stages; returned when "done." | Exists immediately; features added at runtime. |
+| **Interface** | Builder methods often return the Builder (`this`). | Decorators must implement the same interface as the object they wrap. |
+| **Complexity** | Hides the complexity of internal construction. | Adds behavior without changing the internal code. |
+| **Visibility** | The client is involved in the step-by-step construction. | The client often doesn't know the object is "decorated." |
+
+### Key Distinction
+
+> Use **Builder** when you want to simplify the creation of a complex object. Use **Decorator** when you want to add new responsibilities to an object dynamically without using inheritance.
+
